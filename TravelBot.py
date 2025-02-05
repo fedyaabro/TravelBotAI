@@ -6,6 +6,11 @@ from aiogram.filters import Command
 from aiogram.fsm.storage.memory import MemoryStorage  # Добавляем поддержку FSM
 from handlers import info  # Импорт обработчика информации о странах
 from utils.config import TOKEN  # Файл с токеном бота
+from handlers import tickets  # Добавляем поиск билетов
+from handlers import places  # Импортируем обработчик достопримечательностей
+
+
+
 
 # Включаем логирование для отладки
 logging.basicConfig(level=logging.INFO)
@@ -18,9 +23,9 @@ dp = Dispatcher(storage=storage)
 # ⚡ Главное меню бота
 main_menu = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="🗺 Узнать о стране")],
+        [KeyboardButton(text="🗺 Узнать о стране/городе")],
         [KeyboardButton(text="✈ Купить билеты")],
-        [KeyboardButton(text="📍 Построить маршрут")]
+        [KeyboardButton(text="📍 Что посмотреть")]
     ],
     resize_keyboard=True
 )
@@ -36,7 +41,8 @@ async def start_command(message: types.Message):
 
 # ✅ Регистрируем обработчики
 dp.include_router(info.router)
-
+dp.include_router(tickets.router)  # Подключаем обработчики
+dp.include_router(places.router)  # Подключаем обработчик
 # 🚀 Запуск бота
 async def main():
     print("Бот запущен...")

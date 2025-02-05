@@ -1,1 +1,4 @@
 openai
+beautifulsoup4
+requests
+lxml
