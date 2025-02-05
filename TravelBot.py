@@ -1,19 +1,19 @@
-# print("Hello, pidrila")
 import logging
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
-from aiogram import Bot, Dispatcher
-from handlers import info  # Импортируем новый обработчик
+from aiogram.fsm.storage.memory import MemoryStorage  # Добавляем поддержку FSM
+from handlers import info  # Импорт обработчика информации о странах
 from utils.config import TOKEN  # Файл с токеном бота
 
 # Включаем логирование для отладки
 logging.basicConfig(level=logging.INFO)
 
-# Создаём объект бота и диспетчера
+# Создаём объект бота и диспетчер с хранилищем состояний
 bot = Bot(token=TOKEN)
-dp = Dispatcher()
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
 
 # ⚡ Главное меню бота
 main_menu = ReplyKeyboardMarkup(
@@ -33,7 +33,8 @@ async def start_command(message: types.Message):
         "Выбери, что тебя интересует:",
         reply_markup=main_menu
     )
-# Регистрируем обработчик
+
+# ✅ Регистрируем обработчики
 dp.include_router(info.router)
 
 # 🚀 Запуск бота
@@ -43,5 +44,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
 
